@@ -5,7 +5,11 @@ function Hide-File($path='./') {
         # 隐藏目录及目录下的文件
         $path = $path -replace "/","\" # D:\users\40344\
         $path = $path -replace "\\$","" # D:\users\40344
-        attrib +s +h ($path + '\*') /S /D
+        if (Get-ChildItem $path -Recurse -ErrorAction SilentlyContinue) {  
+            # 目录不为空
+            attrib +s +h ($path + '\*') /S /D
+            Write-Output "目录不为空"
+        }
         attrib +s +h $path
     } elseif ($fileType -is [System.IO.FileInfo]) {
         # 隐藏文件
@@ -24,7 +28,11 @@ function Remove-Hide ($path) {
         # 显示目录及子文件
         $path = $path -replace "/","\" # D:\users\40344\
         $path = $path -replace "\\$","" # D:\users\40344
-        attrib -s -h ($path + '\*') /S /D
+        if (Get-ChildItem $path -Recurse -ErrorAction SilentlyContinue) {  
+            # 目录不为空
+            attrib -s -h ($path + '\*') /S /D
+            Write-Output "目录不为空"
+        }
         attrib -s -h $path
     } elseif ($fileType -is [System.IO.FileInfo]) {
         # 显示文件
